@@ -3,6 +3,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var cryptico = require('cryptico');
+var jiff = require('./tests/jiff-client/jiff-server-side.js').jiff;
+
 
 // Server static files
 app.use(express.static("tests"));
@@ -22,6 +24,9 @@ var key_map = {};// public key map
 var triplets_map = {};
 var numbers_map = {};
 
+var establish_server_connections = false;
+var server_side_jiff_instances = {'1':[]};
+
 io.on('connection', function(socket) {
   console.log('user connected');
 
@@ -39,6 +44,7 @@ io.on('connection', function(socket) {
     
     if(party_id == null) party_id = ++(client_map[computation_id]);
     if(party_count == null) party_count = totalparty_map[computation_id];
+
     
     // no party count given or saved.
     if(party_count == null) {
@@ -70,6 +76,25 @@ io.on('connection', function(socket) {
       party_map[socket.id] = party_id;
 
       io.to(socket.id).emit('init', JSON.stringify({ party_id: party_id, party_count: party_count }));
+    }
+
+    // if this flag is turned on, establish jiff instances server-side
+    // to enable instant connections
+    if (msg.establish_server_connections == true) {
+      console.log("connect server side");
+      establish_server_connections = true;
+
+      // calculate how many server-side clients we need
+      var server_side_clients = totalparty_map[computation_id] - client_map[computation_id]
+      
+      if (server_side_clients > 0){
+        console.log("creating " + server_side_clients + " server-side clients");
+        server_side_jiff_instances[computation_id] = [];
+        for (var i = 0; i < server_side_clients; i++){
+          var jiff_instance = jiff.make_jiff("http://localhost:3000", computation_id, {"computation_id":computation_id,"party_count":msg.party_count});
+          server_side_jiff_instances[computation_id].push(jiff_instance);
+        }
+      }
     }
   });
 
@@ -123,6 +148,13 @@ io.on('connection', function(socket) {
     json_msg["party_id"] = from_id;
 
     io.to(socket_map[computation_id][to_id]).emit('share', JSON.stringify(json_msg));
+
+    if (establish_server_connections == true){
+      for(jiff_instance in server_side_jiff_instances[computation_id]){
+        console.log(jiff);
+        jiff.share(jiff_instance, 0);
+      }
+    }
   });
 
   socket.on('open', function(msg) {
