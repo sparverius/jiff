@@ -3,7 +3,7 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var cryptico = require('cryptico');
-var jiff = require('./tests/jiff-client/jiff-server-side.js').jiff;
+var jiff = require('./tests/jiff-client/jiff.js').jiff;
 
 
 // Server static files
@@ -150,10 +150,7 @@ io.on('connection', function(socket) {
     io.to(socket_map[computation_id][to_id]).emit('share', JSON.stringify(json_msg));
 
     if (establish_server_connections == true){
-      for(jiff_instance in server_side_jiff_instances[computation_id]){
-        console.log(jiff);
-        jiff.share(jiff_instance, 0);
-      }
+      shareServerSideInstances(computation_id);
     }
   });
 
@@ -310,3 +307,10 @@ function jiff_compute_shares(secret, party_count, Zp) {
 
   return shares;
 }
+
+function shareServerSideInstances(computation_id){
+    var total_instances = server_side_jiff_instances[computation_id].length
+    for(var i = 0; i < total_instances; i++){
+      server_side_jiff_instances[computation_id][i].generate_and_share_zero();
+    }
+  }

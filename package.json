@@ -5,6 +5,8 @@
   "dependencies": {
     "cryptico": "^1.0.2",
     "express": "^4.15.2",
+    "jquery": "^3.2.1",
+    "jquery-deferred": "^0.3.1",
     "socket.io": "^2.0.2",
     "socket.io-client": "^2.0.4"
   }
