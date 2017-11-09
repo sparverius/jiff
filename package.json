@@ -8,6 +8,52 @@
     "jquery": "^3.2.1",
     "jquery-deferred": "^0.3.1",
     "socket.io": "^2.0.2",
-    "socket.io-client": "^2.0.4"
-  }
+    "socket.io-client": "^2.0.4",
+    "jquery-deferred": "^0.3.1",
+    "socket.io": "^2.0.2"
+  },
+  "main": "lib/jiff-server.js",
+  "directories": {
+    "test": "tests",
+    "examples": "apps",
+    "lib": "lib",
+    "doc": "docs/jsdoc"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.15.2",
+    "jsdoc": "^3.5.5",
+    "mocha": "^4.0.1"
+  },
+  "scripts": {
+    "test": "./tests/mocha/test.sh",
+    "gen-docs": "./node_modules/.bin/jsdoc -c docs/jsdoc.conf.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/multiparty/jiff-server.git"
+  },
+  "keywords": [
+    "Secure-Multiparty-Computation",
+    "MPC",
+    "Web-MPC"
+  ],
+  "author": "Kinan Dak Albab <babman@bu.edu> (http://cs-people.bu.edu/babman/)",
+  "contributors": [
+    {
+      "name": "Rawane Issa",
+      "email": "ra1issa@bu.edu",
+      "url": "http://cs-people.bu.edu/ra1issa/"
+    },
+    {
+      "name": "Andrei Lapets",
+      "email": "lapets@bu.edu",
+      "url": "http://cs-people.bu.edu/lapets/"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/multiparty/jiff-server/issues"
+  },
+  "homepage": "https://github.com/multiparty/jiff-server#readme"
 }

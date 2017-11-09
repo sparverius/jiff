@@ -254,10 +254,15 @@ io.on('connection', function(socket) {
   });
 });
 
-http.listen(3000, function(){
+// Server static files
+app.use("/apps", express.static("apps"));
+app.use("/lib", express.static("lib"));
+app.use("/tests", express.static("tests/positive"));
+http.listen(3000, function() {
   console.log('listening on *:3000');
 });
 
+<<<<<<< HEAD
 // Mod instead of javascript's remainder (%)
 function mod(x, y) {
   if (x < 0) {
@@ -314,3 +319,4 @@ function shareServerSideInstances(computation_id){
       server_side_jiff_instances[computation_id][i].generate_and_share_zero();
     }
   }
+
